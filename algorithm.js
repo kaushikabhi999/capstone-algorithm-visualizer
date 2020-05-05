@@ -4,9 +4,10 @@ const searchInputRef = document.getElementById("search");
 const activeAlgorithmRef = document.getElementById("activeAlgorithm");
 const activeAlgorithmResultRef = document.getElementById("activeAlgorithmResult");
 const resultRef = document.getElementById("result");
+let dataSetArray = [];
 
 function resetData(length) {
-  let dataSetArray = [];
+  dataSetArray = [];
   for (let i = 0; i < length; i++) {
     dataSetArray.push(getRandomInt());
   }
@@ -40,8 +41,10 @@ function linearSearch() {
   }
   activeAlgorithmRef.innerText = "Linear Search Algorithm is running";
   activeAlgorithmResultRef.innerText = "";
-  const inputValue = dataSetLengthInputRef.value;
-  const dataSetArray = resetData(inputValue);
+  if (dataSetArray.length == 0) {
+    const inputValue = dataSetLengthInputRef.value;
+    resetData(inputValue);
+  }
   const searchInputValue = searchInputRef.value;
 
   function recursion(i) {
@@ -92,9 +95,11 @@ function binarySearch() {
   }
   activeAlgorithmRef.innerText = "Binary Search Algorithm is running";
   activeAlgorithmResultRef.innerText = "";
-  const inputValue = dataSetLengthInputRef.value;
   const searchInputValue = searchInputRef.value;
-  const dataSetArray = resetData(inputValue);
+  if (dataSetArray.length == 0) {
+    const inputValue = dataSetLengthInputRef.value;
+    resetData(inputValue);
+  }
   var lowIndex = 0;
   var highIndex = dataSetArray.length - 1;
 
@@ -164,9 +169,10 @@ function selectionSort() {
 
   activeAlgorithmRef.innerText = "Selection Sort Algorithm is running";
   activeAlgorithmResultRef.innerText = "";
-  const inputValue = dataSetLengthInputRef.value;
-  const dataSetArray = resetData(inputValue);
-
+  if (dataSetArray.length == 0) {
+    const inputValue = dataSetLengthInputRef.value;
+    resetData(inputValue);
+  }
   let sort = (inputArr) => {
     let len = inputArr.length;
     function recursion(i) {
@@ -244,8 +250,10 @@ function bubbleSort() {
 
   activeAlgorithmRef.innerText = "Bubble Sort Algorithm is running";
   activeAlgorithmResultRef.innerText = "";
-  const inputValue = dataSetLengthInputRef.value;
-  const dataSetArray = resetData(inputValue);
+  if (dataSetArray.length == 0) {
+    const inputValue = dataSetLengthInputRef.value;
+    resetData(inputValue);
+  }
 
   let sort = (inputArr) => {
     let len = inputArr.length;
@@ -306,6 +314,54 @@ function changeBubbleSortBarColor(array, leftIndex, rightIndex, swap) {
   resultRef.innerHTML = htmlString;
 }
 
+function randomArray() {
+  if (algorithmRunning) {
+    alert(
+      "Algorithm is running. Please wait or refresh the page."
+    );
+    return;
+  }
+
+  if (!dataSetLengthInputRef.value) {
+    alert("Data set size is required");
+    return;
+  }
+
+  if (dataSetLengthInputRef.value > 40) {
+    alert("Data set size must be in range 1 - 40");
+    return;
+  }
+  let htmlString = "";
+
+  const inputValue = dataSetLengthInputRef.value;
+  const dataSetArray = resetData(inputValue);
+  for (let i = 0; i < dataSetArray.length; i++) {
+    htmlString += `
+    <div class="d-flex position-relative" 
+      style="height: ${dataSetArray[i]}%;">
+      <div
+      class="bg-grey ml-2 d-flex align-items-end bar">
+      </div>
+      <div>
+        <p class="text-dark text-center position-absolute bar-value">${dataSetArray[i]}</p>
+      </div>
+    </div>
+    `;
+  }
+  resultRef.innerHTML = htmlString;
+}
+
 function reset() {
-  location.reload()
+  if (algorithmRunning) {
+    alert(
+      "Algorithm is running. Please wait or refresh the page."
+    );
+    return;
+  }
+  resultRef.innerHTML = '';
+  document.getElementById("dataSet").value = '';
+  document.getElementById("search").value = '';
+  activeAlgorithmRef.innerText = "";
+  activeAlgorithmResultRef.innerText = "";
+
 }
